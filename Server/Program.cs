@@ -8,23 +8,19 @@ namespace MongoWebShell.Server
 {
     class Program
     {
-        private static ConsoleColor originalColor;
         private static MongoServer upstream;
 
         static void Main( string[] args )
         {
-            originalColor = Console.ForegroundColor;
-            PrintBanner( );
+            Util.ConsoleWriteLine( "mongoDB Web Shell v1.00\n", ConsoleColor.Cyan );
 
             // Connect to the upstream server.
             Console.Write( "Connecting to upstream server..." );
             if ( ConnectToUpstream( ) )
-                Console.WriteLine( "success!" );
+                Util.ConsoleWriteLine( "success!", ConsoleColor.Green );
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine( "failure.");
-                Console.ForegroundColor = originalColor;
+                Util.ConsoleWriteLine( "failure.", ConsoleColor.Red );
                 Console.WriteLine( "Please ensure MongoDB is running.\n" );
                 return;
             }
@@ -42,19 +38,6 @@ namespace MongoWebShell.Server
             Console.ReadKey( );
             Console.WriteLine( "\nServer shutting down..." );
             // server.Stop( );
-        }
-
-        /// <summary>
-        /// Just prints the startup banner.
-        /// </summary>
-        private static void PrintBanner( )
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write( "mongoDB Web Shell" );
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write( " v1.00" );
-            Console.ForegroundColor = originalColor;
-            Console.WriteLine( );
         }
 
         /// <summary>

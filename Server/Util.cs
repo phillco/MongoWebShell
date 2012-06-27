@@ -69,5 +69,25 @@ namespace MongoWebShell.Server
         {
             LaunchProgram( address );
         }
+
+        /// <summary>
+        /// Writes the given text to the console in the given color.
+        /// </summary>
+        public static void ConsoleWrite( object text, ConsoleColor color )
+        {
+            var originalColor = Console.ForegroundColor;
+
+            Console.ForegroundColor = color;
+            Console.Write( text.ToString( ) );
+            Console.ForegroundColor = originalColor;
+        }
+
+        /// <summary>
+        /// Writes the given text (and a newline) to the console in the given color.
+        /// </summary>
+        public static void ConsoleWriteLine( object text, ConsoleColor color )
+        {
+            ConsoleWrite( text.ToString( ) + Environment.NewLine, color );
+        }
     }
 }
