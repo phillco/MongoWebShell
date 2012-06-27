@@ -14,11 +14,20 @@ namespace MongoWebShell.Server
 
             public void HandleRequest( HTTPServerRequest request, HTTPServerResponse response )
             {
-                if ( request.URI == "/" )
+                var root = Path.GetFullPath( RootPath );
+                var path = Path.Combine( root, request.URI.Substring( 1 ) );
+
+                if ( !path.StartsWith( root ) )
                 {
-                    response.ContentType = "text/html";
-                    response.SendFile( Path.Combine( RootPath, "index.html" ), "text/html" );
+                    response.StatusAndReason = HTTPServerResponse.HTTPStatus.HTTP_FORBIDDEN;
+                    response.Send( );
+                    return;
                 }
+
+                if ( request.URI == "/" )
+                    response.SendFile( Path.Combine( RootPath, "index.html" ), "text/html" );
+                else if ( File.Exists( path ) )
+                    response.SendFile( path, "unknown" );
                 else
                 {
                     response.StatusAndReason = HTTPServerResponse.HTTPStatus.HTTP_NOT_FOUND;
@@ -40,7 +49,7 @@ namespace MongoWebShell.Server
 
         public static HTTPServer Create( int port = 8080 )
         {
-            return new HTTPServer( new RequestHandlerFactory( ), port );                   
-        }       
+            return new HTTPServer( new RequestHandlerFactory( ), port );
+        }
     }
 }
