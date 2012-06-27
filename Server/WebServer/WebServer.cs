@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using HybridDSP.Net.HTTP;
 using System.IO;
+using Server.WebServer;
 
 namespace MongoWebShell.Server
 {
@@ -27,7 +28,7 @@ namespace MongoWebShell.Server
                 if ( request.URI == "/" )
                     response.SendFile( Path.Combine( RootPath, "index.html" ), "text/html" );
                 else if ( File.Exists( path ) )
-                    response.SendFile( path, "unknown" );
+                    response.SendFile( path, MimeTypeResolver.DetermineMimeType( path ) );
                 else
                 {
                     response.StatusAndReason = HTTPServerResponse.HTTPStatus.HTTP_NOT_FOUND;
